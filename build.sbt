@@ -2,13 +2,7 @@ import sbt._
 import Keys._
 import Settings._
 
-// shadow sbt-scalajs' crossProject and CrossType from Scala.js 0.6.x
-import sbtcrossproject.CrossPlugin.autoImport.{crossProject, CrossType}
-
-val scalaJS06xVersion = "0.6.31"
-val scalaJS06xCrossVersion = CrossVersion.binaryWith(prefix = "sjs0.6_", suffix = "")
-
-val scalaJS1xVersion = "1.0.0"
+val scalaJS1xVersion = "1.1.0"
 val scalaJS1xCrossVersion = CrossVersion.binaryWith(prefix = "sjs1_", suffix = "")
 
 def scalaJSBinVersion(scalaJSVersion: String): String =
@@ -28,7 +22,6 @@ lazy val root = project
   .in(file("."))
   .aggregate(
     shared.js, shared.jvm, client, router,
-    page06x, compilerServer06x, runtime06x,
     page1x, compilerServer1x, runtime1x
   )
 
@@ -76,7 +69,6 @@ def pageProject(p: Project, suffix: String, scalaJSVersion: String, scalaJSCross
     )
   )
 }
-lazy val page06x = pageProject(project, "06x", scalaJS06xVersion, scalaJS06xCrossVersion)
 lazy val page1x = pageProject(project, "1x", scalaJS1xVersion, scalaJS1xCrossVersion)
 
 /* This project is not compiled. It is only used to easily resolve
@@ -93,7 +85,6 @@ def runtimeProject(p: Project, scalaJSVersion: String): Project = {
     )
   )
 }
-lazy val runtime06x = runtimeProject(project, scalaJS06xVersion)
 lazy val runtime1x = runtimeProject(project, scalaJS1xVersion)
 
 def compilerServerProject(p: Project, suffix: String, scalaJSVersion: String): Project = p
@@ -170,7 +161,6 @@ def compilerServerProject(p: Project, suffix: String, scalaJSVersion: String): P
     )
   )
 
-lazy val compilerServer06x = compilerServerProject(project, "06x", scalaJS06xVersion)
 lazy val compilerServer1x = compilerServerProject(project, "1x", scalaJS1xVersion)
 
 lazy val router = project

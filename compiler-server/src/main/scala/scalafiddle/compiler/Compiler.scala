@@ -8,8 +8,8 @@ import scala.tools.nsc.Settings
 import scala.tools.nsc.reporters.StoreReporter
 import scalafiddle.compiler.cache.{AutoCompleteCache, CompilerCache, LinkerCache}
 import scalafiddle.shared.{CSSLib, ExtLib, JSLib}
-
 import ScalaJSCompat._
+import org.scalajs.linker.interface.ModuleKind
 
 /**
   * Handles the interaction between scala-js-fiddle and
@@ -150,13 +150,14 @@ class Compiler(libManager: LibraryManager, code: String) { self =>
       defaultLinkerConfig
         .withSemantics(semantics)
         .withSourceMap(false)
+        .withModuleKind(ModuleKind.CommonJSModule)
         .withClosureCompilerIfAvailable(fullOpt)
 
     // add parameters as fake libraries to make caching work correctly
     val libs = extLibs + ExtLib("semantics", "optimized", fullOpt.toString, false)
 
     try {
-      val linker     = LinkerCache.getOrUpdate(libs, createLinker(linkerConfig))
+      val linker     = createLinker(linkerConfig)
       val allIRFiles = libManager.linkerLibraries(extLibs) ++ userFiles
       ScalaJSCompat.link(linker, allIRFiles, sjsLogger)
     } catch {

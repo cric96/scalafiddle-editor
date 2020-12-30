@@ -90,10 +90,8 @@ object GlobalInitCompat {
   def initGlobal(settings: Settings, reporter: StoreReporter, libs: Seq[io.AbstractFile]): nsc.Global = {
     val cp = new AggregateClassPath(libs.map(buildClassPath))
     val cl = inMemClassloader(libs)
-
     new nsc.Global(settings, reporter) { g =>
       override def classPath = cp
-
       override lazy val plugins = List[Plugin](
         new ScalaJSCompat.ScalaJSCompilerPlugin(this),
         new org.scalamacros.paradise.Plugin(this),

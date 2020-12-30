@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 
 import scala.concurrent.duration._
 
-object Server extends App {
+object Server {
   implicit val system       = ActorSystem()
   implicit val timeout      = Timeout(30.seconds)
   implicit val materializer = ActorMaterializer()
